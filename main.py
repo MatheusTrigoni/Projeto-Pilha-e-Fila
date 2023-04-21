@@ -33,7 +33,10 @@ def operações(ft: deque):
             if valor == "fim":
                 break
             else:
-                fila.append(float(valor))
+                try:
+                    fila.append(float(valor))
+                except ValueError:
+                    print('O valor inserido não se trata de um valor numérico (lembre-se, para encerrar a inserção, digite "fim").')
         ft.append(fila)
         operações(filaTotal)
     elif escolha == '2':
@@ -69,15 +72,17 @@ def operações(ft: deque):
 def adição(filaOp: deque):
     print("\nAdição\nValores:", end=' ')
     filaOp.popleft() # Tirando o inteiro que representa a operação
+    for i in filaOp:
+        print(i, end=" | ")
     print("\nResultado:", sum(filaOp))
     
 def subtração(filaOp: deque):
     print("\nSubtração\nValores:", end=' ')
     filaOp.popleft() # Tirando o inteiro que representa a operação
     sub = filaOp.popleft() # Tirando o primeiro número da operação e o atribuindo a sub para meios de cálculo
-    print(sub, end=' ') # Printando esse único valor fora do loop (já que ele "não faz mais parte da lista")
+    print(sub, end=" | ") # Printando esse único valor fora do loop (já que ele "não faz mais parte da lista")
     for i in filaOp:
-        print(i, end=' ')
+        print(i, end=" | ")
         sub -= i
     print("\nResultado:", sub)
 
@@ -86,7 +91,7 @@ def multiplicação(filaOp: deque):
     filaOp.popleft() # Tirando o inteiro que representa a operação
     multi = 1
     for i in filaOp:
-        print(i, end=' ')
+        print(i, end=" | ")
         multi *= i
     print("\nResultado:", multi)
 
@@ -94,9 +99,9 @@ def divisão(filaOp: deque):
     print("\nDivisão\nValores:", end=' ')
     filaOp.popleft() # Tirando o inteiro que representa a operação
     div = filaOp.popleft() # Tirando o primeiro número da operação e o atribuindo a div para meios de cálculo
-    print(div, end=' ') # Printando esse único valor fora do loop (já que ele "não faz mais parte da lista")
+    print(div, end=" | ") # Printando esse único valor fora do loop (já que ele "não faz mais parte da lista")
     for i in filaOp:
-        print(i, end=' ')
+        print(i, end=" | ")
         div /= i
     print("\nResultado:", div)
 
