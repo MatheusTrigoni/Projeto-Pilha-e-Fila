@@ -3,34 +3,37 @@ from os import system
 from time import sleep
 
 def menu_principal():
+    system("cls")
     print("\nMENU PRINCIPAL\n1 - Operações\n2 - Expressão\n0 - Finalizar Programa")
     # Acredito ser o equilíbrio entre ter as informações mantidas sem perder tudo do nada e não deixar o terminal extremamente poluído
-    print("\nOBS: enquanto no menu de OPERAÇÕES tudo será mantido, quando voltar ao MENU PRINCIPAL, tudo será apagado")
+    print("\nOBS: Quando uma ou mais operações forem realizadas no menu de OPERAÇÕES, elas serão apagadas da fila e do terminal (funcional e visualmente).")
     escolha = input()
     if escolha == '1':
-        system("cls")
         operações(filaTotal)
     elif escolha == '0':
-        print("\nPrograma finalizado.\n")
+        system("cls")
+        print("\nPrograma finalizado.\nVolte sempre, obrigado!\n")
         return
     else:
         print("Opção inválida, retornado ao MENU PRINCIPAL...")
-        sleep(1)
-        system("cls")
+        sleep(2)
         menu_principal()
 
-def operações(ft: deque): 
+def operações(ft: deque):
+    system("cls") 
     print("\nOPERAÇÕES\n1 - Adicionar Operação na Fila\n2 - Executar Próxima Operação da Fila")
     print("3 - Executar Todas as Operações da Fila\n0 - Voltar para o MENU PRINCIPAL")
     escolha = input()
     if escolha == '1':
+        system("cls")
         print("\n1 - Adição (+)\n2 - Subtração (-)\n3 - Multiplicação (*)\n4 - Divisão (/)")
         escolha = input()
         # Essa verificação existe aqui para que não haja necessidade de verificar durante a execução das operações
         if escolha not in ('1', '2', '3', '4'):
             print("\nOperação inválida, retornando ao menu de OPERAÇÕES...")
-            sleep(1)
+            sleep(2)
             operações(filaTotal)
+        system("cls")
         print('\nDigite quantos valores quiser e "fim" para encerrar a inserção de valores:')
         fila = deque([int(escolha)])
         while True:
@@ -43,36 +46,32 @@ def operações(ft: deque):
                 except ValueError:
                     print('O valor inserido não se trata de um valor numérico (lembre-se, para encerrar a inserção, digite "fim").')
         ft.append(fila)
+        system("cls")
         operações(filaTotal)
     elif escolha == '2':
         # Necessário para caso o usuário selecione para executar a próxima operação na fila quando a mesma estiver vazia
         try:
             if ft[0][0] == 1:
+                system("cls")
                 adição(ft[0])
-                ft.popleft()
-                sleep(3)
-                operações(filaTotal)
             elif ft[0][0] == 2:
+                system("cls")
                 subtração(ft[0])
-                ft.popleft()
-                sleep(3)
-                operações(filaTotal)
             elif ft[0][0] == 3:
+                system("cls")
                 multiplicação(ft[0])
-                ft.popleft()
-                sleep(3)
-                operações(filaTotal)
             else:
+                system("cls")
                 divisão(ft[0])
-                ft.popleft()
-                sleep(2)
-                operações(filaTotal)
+            ft.popleft()
+            input("\nEsses dados não são armazenadas em lugar algum, dê uma boa olhada neles antes que desapareçam. Prossiga digitando qualquer tecla: ")
+            operações(filaTotal)
         except IndexError:
+            system("cls")
             print("\nA fila de operações está vazia, retornando ao menu de OPERAÇÕES...")
-            sleep(1)
+            sleep(2)
             operações(filaTotal)
     elif escolha == '0':
-        system("cls")
         menu_principal()
 
 def adição(filaOp: deque):
