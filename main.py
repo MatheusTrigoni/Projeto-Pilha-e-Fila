@@ -1,30 +1,35 @@
 from collections import deque
-import time
+from os import system
+from time import sleep
 
 def menu_principal():
     print("\nMENU PRINCIPAL\n1 - Operações\n2 - Expressão\n0 - Finalizar Programa")
+    # Acredito ser o equilíbrio entre ter as informações mantidas sem perder tudo do nada e não deixar o terminal extremamente poluído
+    print("\nOBS: enquanto no menu de OPERAÇÕES tudo será mantido, quando voltar ao MENU PRINCIPAL, tudo será apagado")
     escolha = input()
     if escolha == '1':
+        system("cls")
         operações(filaTotal)
     elif escolha == '0':
         print("\nPrograma finalizado.\n")
         return
     else:
-        print("Opção inválida, retornado ao menu principal...")
-        time.sleep(1)
+        print("Opção inválida, retornado ao MENU PRINCIPAL...")
+        sleep(1)
+        system("cls")
         menu_principal()
 
-def operações(ft: deque):
+def operações(ft: deque): 
     print("\nOPERAÇÕES\n1 - Adicionar Operação na Fila\n2 - Executar Próxima Operação da Fila")
-    print("3 - Executar Todas as Operações da Fila\n0 - Voltar para o menu principal")
+    print("3 - Executar Todas as Operações da Fila\n0 - Voltar para o MENU PRINCIPAL")
     escolha = input()
     if escolha == '1':
         print("\n1 - Adição (+)\n2 - Subtração (-)\n3 - Multiplicação (*)\n4 - Divisão (/)")
         escolha = input()
         # Essa verificação existe aqui para que não haja necessidade de verificar durante a execução das operações
         if escolha not in ('1', '2', '3', '4'):
-            print("\nOperação inválida, retornando ao menu de operações...")
-            time.sleep(1)
+            print("\nOperação inválida, retornando ao menu de OPERAÇÕES...")
+            sleep(1)
             operações(filaTotal)
         print('\nDigite quantos valores quiser e "fim" para encerrar a inserção de valores:')
         fila = deque([int(escolha)])
@@ -45,28 +50,29 @@ def operações(ft: deque):
             if ft[0][0] == 1:
                 adição(ft[0])
                 ft.popleft()
-                time.sleep(3)
+                sleep(3)
                 operações(filaTotal)
             elif ft[0][0] == 2:
                 subtração(ft[0])
                 ft.popleft()
-                time.sleep(3)
+                sleep(3)
                 operações(filaTotal)
             elif ft[0][0] == 3:
                 multiplicação(ft[0])
                 ft.popleft()
-                time.sleep(3)
+                sleep(3)
                 operações(filaTotal)
             else:
                 divisão(ft[0])
                 ft.popleft()
-                time.sleep(2)
+                sleep(2)
                 operações(filaTotal)
         except IndexError:
-            print("\nA fila de operações está vazia, retornando ao menu de operações...")
-            time.sleep(2)
+            print("\nA fila de operações está vazia, retornando ao menu de OPERAÇÕES...")
+            sleep(1)
             operações(filaTotal)
     elif escolha == '0':
+        system("cls")
         menu_principal()
 
 def adição(filaOp: deque):
