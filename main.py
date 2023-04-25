@@ -1,4 +1,5 @@
 from collections import deque
+from queue import LifoQueue
 from os import system
 from time import sleep
 
@@ -64,7 +65,29 @@ def operações(ft: deque):
                 system("cls")
                 divisão(ft[0])
             ft.popleft()
-            input("\nEsses dados não são armazenadas em lugar algum, dê uma boa olhada neles antes que desapareçam. Prossiga digitando qualquer tecla: ")
+            input("\nEsses dados não são armazenadas em lugar algum, dê uma boa olhada neles antes que desapareçam. Aperte ENTER ")
+            operações(filaTotal)
+        except IndexError:
+            system("cls")
+            print("\nA fila de operações está vazia, retornando ao menu de OPERAÇÕES...")
+            sleep(2)
+            operações(filaTotal)
+    elif escolha == '3':
+        try:
+            a = ft[0]
+            del a
+            system("cls")
+            for i in ft:
+                if i[0] == 1:
+                    adição(i)
+                elif i[0] == 2:
+                    subtração(i)
+                elif i[0] == 3:
+                    multiplicação(i)
+                else:
+                    divisão(i)
+            ft.clear()
+            input("\nEsses dados não são armazenadas em lugar algum, dê uma boa olhada neles antes que desapareçam. Aperte ENTER ")
             operações(filaTotal)
         except IndexError:
             system("cls")
