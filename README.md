@@ -10,7 +10,7 @@ Consiste no uso dos conceitos de Pilha e Fila em um programa que funciona como c
 ### Menu Principal
 
 1. Ir para o menu de Operações.
-2. Validar expressão matemática (desenvolvimento ainda não iniciado)
+2. Validar expressão matemática (em desenvolvimento)
 3. Finalizar o programa.
 
 ### Menu de Operações
