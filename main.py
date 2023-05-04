@@ -14,11 +14,11 @@ def menu_principal() -> None:
     elif escolha == '0':
         system("cls")
         print("Programa finalizado.\n")
-        sleep(2)
+        sleep(2) # Para caso o usuário execute o script em uma janela, dessa maneira ela não fechará logo depois do print
         return
     else:
         system("cls")
-        print("Opção inválida, retornado ao MENU PRINCIPAL...")
+        print("Opção inválida, retornando ao MENU PRINCIPAL...")
         sleep(1.5)
         menu_principal()
 
@@ -75,7 +75,7 @@ def operações(ft: Queue) -> None:
             operações(filaTotal)
         else:
             system("cls")
-            print("A fila de operações está vazia, retornando ao menu de OPERAÇÕES...")
+            print("A fila está vazia, retornando ao menu de OPERAÇÕES...")
             sleep(1.5)
             operações(filaTotal)
     elif escolha == '0':
@@ -85,46 +85,6 @@ def operações(ft: Queue) -> None:
         print("Opção inválida, retornando ao menu de OPERAÇÕES...")
         sleep(1.5)
         operações(filaTotal)
-
-def expressão():
-    system("cls")
-    exp = input("EXPRESSÃO\nDigite uma expressão matemática para verificar sua procedência: ")
-    pilha = LifoQueue()
-    for i in exp:
-        if i in ('(', ')', '[', ']', '{', '}'):
-            pilha.put(i)
-    if not pilha.empty() and pilha.qsize() % 2 == 0:
-        ccp = {
-        '(': ')',
-        '[': ']',
-        '{': '}'
-        }
-        ref = None
-        comRef = True
-        abertos = pilha.qsize() / 2 # Quantidade restante de abertos
-        restantes = [] # Os que ainda não foram fechados
-        while pilha.qsize() > 0:
-            elemento = pilha.get()
-            for i in ccp:
-                if elemento == ccp[i]:
-                    ref = i
-                    comRef = True
-                    restantes.append(elemento)
-                    break
-                elif elemento == i and (elemento != ref and comRef):
-                    print("\n2ª condição\nINVÁLIDA")
-                    return
-                elif elemento == i and ccp[i] in restantes:
-                    restantes.remove(ccp[i])
-                    abertos -= 1
-                    comRef = False
-                    break
-            print(ref)
-        if abertos == 0:
-            print("\n3ª condição\nVÁLIDA")
-            return
-    print("\n1ª condição\nINVÁLIDA")
-    return
 
 def execução_fila(primeiraFila: Queue) -> None:
     op = primeiraFila.get() # Atribuindo o primeiro número da fila (que representa a operação) à variável op
@@ -178,6 +138,91 @@ def divisão(filaOp: Queue) -> None:
             pass # Apenas ignorando o valor 0 digitado
     print("\nResultado:", div, "\n")
 
+def expressão() -> None:
+    system("cls")
+    exp = input("EXPRESSÃO\nDigite uma expressão matemática (com espaços entre os termos) para verificar sua procedência: ").split(' ')
+    ccpPilha = LifoQueue()
+    numPilha = LifoQueue()
+    for i in exp:
+        if i in ('(', ')', '[', ']', '{', '}'):
+            ccpPilha.put(i)
+        else:
+            numPilha.put(i)
+    if ccpPilha.empty() and numPilha.qsize() > 1:
+        if verificador_num(numPilha):
+            print("\nVÁLIDA\n\nRetornando ao MENU PRINCIPAL...")
+            sleep(3.5)
+            menu_principal()
+        else:
+            print("\nINVÁLIDA\n\nRetornando ao MENU PRINCIPAL...")
+            sleep(3.5)
+            menu_principal()
+    elif numPilha.empty() and ccpPilha.qsize() > 1:
+        if verificador_ccp(ccpPilha):
+            print("\nVÁLIDA\n\nRetornando ao MENU PRINCIPAL...")
+            sleep(3.5)
+            menu_principal()
+        else:
+            print("\nINVÁLIDA\n\nRetornando ao MENU PRINCIPAL...")
+            sleep(3.5)
+            menu_principal()
+    elif ccpPilha.qsize() > 1 and numPilha.qsize() > 1:
+        if verificador_ccp(ccpPilha) and verificador_num(numPilha):
+            print("\nVÁLIDA\n\nRetornando ao MENU PRINCIPAL...")
+            sleep(3.5)
+            menu_principal()
+        else:
+            print("\nINVÁLIDA\n\nRetornando ao MENU PRINCIPAL...")
+            sleep(3.5)
+            menu_principal()
+    else:
+        print("\nINVÁLIDA\n\nRetornando ao MENU PRINCIPAL...")
+        sleep(3.5)
+        menu_principal()
+
+
+def verificador_ccp(pilha: LifoQueue) -> bool:
+    if pilha.qsize() % 2 == 0:
+        ccp = {
+        '(': ')',
+        '[': ']',
+        '{': '}'
+        }
+        ref = None
+        comRef = True
+        abertos = pilha.qsize() / 2 # Quantidade restante de abertos
+        restantes = [] # Os que ainda não foram fechados
+        while pilha.qsize() > 0:
+            elemento = pilha.get()
+            for i in ccp:
+                if elemento == ccp[i]:
+                    ref = i
+                    comRef = True
+                    restantes.append(elemento)
+                    break
+                elif elemento == i and (elemento != ref and comRef): # Quando um elemento está posicionado incorretamente. Exemplo: { [ ( ) [ }
+                    return False
+                elif elemento == i and ccp[i] in restantes:
+                    restantes.remove(ccp[i])
+                    abertos -= 1
+                    comRef = False
+                    break
+        if abertos == 0:
+            return True
+    return False
+
+def verificador_num(pilha: LifoQueue) -> bool:
+    elemento = pilha.get()
+    if elemento not in ('+', '-', '/', '*'):
+        while pilha.qsize() > 0:
+            ref = elemento
+            elemento = pilha.get()
+            if elemento in ('+', '-', '/', '*') and ref in ('+', '-', '/', '*'):
+                return False
+            elif pilha.empty() and elemento in ('+', '-', '/', '*'):
+                return False
+        return True
+    return False
 
 filaTotal = Queue()
 menu_principal()
